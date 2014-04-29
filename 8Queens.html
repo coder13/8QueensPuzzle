@@ -1,0 +1,123 @@
+<html>
+<head>
+
+  <title>8 Queens Puzzle</title>
+  <script type="text/javascript" src="http://underscorejs.org/underscore-min.js"></script>
+  <script type="text/javascript" src="js/chessboard-0.3.0.js"></script>
+  <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.js"></script>
+  <link rel="stylesheet" href="css/chessboard-0.3.0.css" />
+
+  <script type="text/javascript">
+
+  var solutions = [];
+  var mainBoard
+
+	var solCfg = {
+		'showNotation': false,
+		'draggable': true
+	}
+
+	document.addEventListener('DOMContentLoaded', function() {
+  		mainBoard = new ChessBoard("chessBoard", {
+		'draggable': true, 
+		'position': 'Q/1Q/2Q/3Q/4Q/5Q/6Q/7Q'});
+    });
+
+    function addSolution() {
+    	var solList = document.getElementById("solutionsList");
+
+    	var solLi = document.createElement('li');
+    	var solBoard = document.createElement('div');
+    	solBoard.id = 'solBoard' + solutions.length.toString();
+    	solBoard.class = 'solutionsBoard';
+    	
+    	solLi.appendChild(solBoard);
+    	solList.appendChild(solLi);
+
+    	var board = new ChessBoard(solBoard.id, solCfg);
+    	solutions.push(board);
+    }
+
+    function validate() {
+    	var v = document.getElementById('valid');
+    	v.innerHTML = 'works!';
+    }
+
+  </script>
+
+  <style type="text/css">
+	body  {
+		position: relative;
+	}
+
+	ul {
+		list-style: none;
+		padding: 0px;
+		margin: 0px;
+		border: none;
+	}
+
+	li {
+		list-style: none;
+		padding-left: 0;
+		
+		width:100px;
+		margin-left:0px;
+		margin-top: 20px;
+		margin-bottom: 20px;
+
+		float: center;
+		text-indent: 0px;
+	}
+
+	div.chessBoard {
+		width: 300px;
+		height: 300px;
+		float: center;
+		margin: 10px;
+	}
+
+	div.solutionsBoard {
+		width: 48px;
+		height: 48px;
+		padding: none;
+
+	}
+
+  	div.solutions {
+  		overflow: auto;
+  		width: 120;
+  		height: 100%;
+  		float: left;
+
+  		padding: 0px;
+  		border: none;
+		border-right: 1px solid black;
+  	}
+
+  </style>
+
+
+</head>
+
+<body>
+
+	<div id="solutions" class="solutions">
+		<button onClick='addSolution()'>Add Solution</button>
+		<ul id="solutionsList">
+		</ul>
+	</div>
+	<div style="width: 1000px; float:left;" > 
+		<div style="float: left">
+			<div id="chessBoard" class="chessBoard" onclick="validate()"></div>
+		</div>
+
+		<div style="float: left; padding: 10px"> 
+			<p id='valid'>This is an example paragraph</p>
+		</div>
+
+	</div>
+</body>
+
+
+</html>
