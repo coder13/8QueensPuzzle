@@ -24,21 +24,24 @@
   			grid = perm();
   		}
   		console.log(toFen(grid[0]));
-  		mainBoard.position(toFen(grid[0]));
 
-  		mainBoard = new ChessBoard("chessBoard", {'draggable': true, 'position': toFen(grid[0])});
+  		mainBoard = new ChessBoard("chessBoard");
+  		mainBoard.position(toFen(grid[0]));
     });
 
 	function toFen(g) {
 		var fen = '';
 		for (var i = 0; i < g.length; i++) {
-			fen += (g[i]!=0?g[i].toString():'') + 'Q/';
+			fen += (g[i]?g[i].toString():'') + 'Q' + (i!=g.length-1?'/':'');
 		}
 		return fen;
 	}
 
 	function fromFen(fen) {
 		var g = [];
+		var f = fen.split('/');
+		for (var i = 0; i < f.length; i++)
+			g.push(parseInt(f[i]));
 		return g;
 	}
 
@@ -99,7 +102,7 @@
     function validate(event) {
     	var v = document.getElementById('valid');
     	v.innerHTML = 'works!';
-    	var id = parseInt(event.id.replace('solBoard', ''));
+    	var id = parseInt(event.srcElement.id.replace('solBoard', ''));
 
     }
 
