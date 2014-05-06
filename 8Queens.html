@@ -4,13 +4,14 @@
   <title>8 Queens Puzzle</title>
   <script type="text/javascript" src="http://underscorejs.org/underscore-min.js"></script>
   <script type="text/javascript" src="js/chessboard-0.3.0.js"></script>
-  <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.js"></script>
+  <!--<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.js"></script>-->
+  <script type="text/javascript" src="js/jquery-2.1.0.js"></script>
   <link rel="stylesheet" href="css/chessboard-0.3.0.css" />
 
   <script type="text/javascript">
 
-  var solutions = [];
-  var mainBoard
+  	var solutions = [];
+  	var mainBoard;
 
 	var solCfg = {
 		'showNotation': false,
@@ -18,10 +19,64 @@
 	}
 
 	document.addEventListener('DOMContentLoaded', function() {
-  		mainBoard = new ChessBoard("chessBoard", {
-		'draggable': true, 
-		'position': 'Q/1Q/2Q/3Q/4Q/5Q/6Q/7Q'});
+  		var grid = perm();
+  		while (!val(grid[0])) {
+  			grid = perm();
+  		}
+  		console.log(toFen(grid[0]));
+  		mainBoard.position(toFen(grid[0]));
+
+  		mainBoard = new ChessBoard("chessBoard", {'draggable': true, 'position': toFen(grid[0])});
     });
+
+	function toFen(g) {
+		var fen = '';
+		for (var i = 0; i < g.length; i++) {
+			fen += (g[i]!=0?g[i].toString():'') + 'Q/';
+		}
+		return fen;
+	}
+
+	function fromFen(fen) {
+		var g = [];
+		return g;
+	}
+
+	function rnd (min, max) {
+		return Math.floor(Math.random()*(max-min)-min);
+	}
+
+    function val(g) {
+     	for (var i = 0; i < (g.length-1); i++) {
+     		for (j = i+1; j < (g.length); j++) {
+     			if (Math.abs(g[j]-g[i]) == Math.abs(j-i)) {
+     				return false;
+     			}
+     		}
+     	}
+     	return true;
+    }
+
+    function combine(a,b) {
+    	var c = 0;
+    	for (var i = a.length-1; i > -1; i--)
+    		c |= a[i]<<(b*i);
+    	return c;
+    }
+
+	function perm(s) {
+		n = s?s:8; 
+		var a = [];
+		var b = 0;
+		while (a.length < n) {
+			var r = rnd(0,n);
+			while (a.indexOf(r) != -1)
+				r = rnd(0,n);
+			a.push(r);
+		}
+		b = combine(a, Math.ceil(Math.log(n,2)));
+		return [a,b];
+	}
 
     function addSolution() {
     	var solList = document.getElementById("solutionsList");
@@ -30,17 +85,22 @@
     	var solBoard = document.createElement('div');
     	solBoard.id = 'solBoard' + solutions.length.toString();
     	solBoard.class = 'solutionsBoard';
-    	
+    	solBoard.addEventListener('click', validate);
+
     	solLi.appendChild(solBoard);
     	solList.appendChild(solLi);
 
+
     	var board = new ChessBoard(solBoard.id, solCfg);
+    	console.log(board.fen());
     	solutions.push(board);
     }
 
-    function validate() {
+    function validate(event) {
     	var v = document.getElementById('valid');
     	v.innerHTML = 'works!';
+    	var id = parseInt(event.id.replace('solBoard', ''));
+
     }
 
   </script>
