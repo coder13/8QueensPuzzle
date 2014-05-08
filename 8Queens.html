@@ -4,30 +4,43 @@
   <title>8 Queens Puzzle</title>
   <script type="text/javascript" src="http://underscorejs.org/underscore-min.js"></script>
   <script type="text/javascript" src="js/chessboard-0.3.0.js"></script>
-  <!--<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.js"></script>-->
   <script type="text/javascript" src="js/jquery-2.1.0.js"></script>
   <link rel="stylesheet" href="css/chessboard-0.3.0.css" />
 
   <script type="text/javascript">
 
   	var solutions = [];
+  	var boards = [];
   	var mainBoard;
 
 	var solCfg = {
-		'showNotation': false,
-		'draggable': true
+		'showNotation': false
 	}
 
 	document.addEventListener('DOMContentLoaded', function() {
-  		var grid = perm();
-  		while (!val(grid[0])) {
-  			grid = perm();
-  		}
-  		console.log(toFen(grid[0]));
+  		genAllSolutions();
 
-  		mainBoard = new ChessBoard("chessBoard");
-  		mainBoard.position(toFen(grid[0]));
+  		mainBoard = new ChessBoard("chessBoard", {});
+  		mainBoard.position(toFen(solutions[0][0]));
+
+  		for (var i = 0; i < solutions.length; i++) {
+			addSolution(solutions[i]);
+		}
     });
+
+	function genAllSolutions() {
+		for (var i = 0; i < 92; i++) {
+			var grid = perm();
+	  		while (true) {
+	  			if (val(grid[0]) && !existsInSolutions(grid))
+	  				break;
+	  			grid = perm();
+	  		}
+	  		solutions.push(grid);
+	  		i++;
+		}
+		console.log(solutions.length);
+	}
 
 	function toFen(g) {
 		var fen = '';
@@ -45,7 +58,11 @@
 		return g;
 	}
 
-	function rnd (min, max) {
+	function log2(val) {
+  		return Math.log(val) / Math.LN2;
+	}
+
+	function rnd(min, max) {
 		return Math.floor(Math.random()*(max-min)-min);
 	}
 
@@ -77,33 +94,54 @@
 				r = rnd(0,n);
 			a.push(r);
 		}
-		b = combine(a, Math.ceil(Math.log(n,2)));
+		// b = combine(a, Math.ceil(log2(n)));
+		b = parseInt(a.join(''));
 		return [a,b];
 	}
 
-    function addSolution() {
+    function addSolution(grid) {
+    	if (!grid) {
+	    	grid = solutions[rnd(0,solutions.length)];
+	  	}
+
     	var solList = document.getElementById("solutionsList");
 
     	var solLi = document.createElement('li');
-    	var solBoard = document.createElement('div');
-    	solBoard.id = 'solBoard' + solutions.length.toString();
-    	solBoard.class = 'solutionsBoard';
-    	solBoard.addEventListener('click', validate);
+    		solLi.onclick = function(e) {
+    			var id = grid[0];
+    			mainBoard.position(toFen(id), false);
+    		}    
+	
 
-    	solLi.appendChild(solBoard);
+		var solP = document.createElement('p');
+			solP.innerHTML = grid[1];
+    	var solBoard = document.createElement('div');
+	    	solBoard.id = 'solBoard' + boards.length.toString();
+	    	solBoard.class = 'solutionsBoard';
+
+	    solLi.appendChild(solP);
+	    solLi.appendChild(solBoard);
     	solList.appendChild(solLi);
 
+    	board = new ChessBoard("solBoard" + boards.length.toString(), solCfg);
+  		board.position(toFen(grid[0]));
+    	boards.push([board, grid[0]]);
 
-    	var board = new ChessBoard(solBoard.id, solCfg);
-    	console.log(board.fen());
-    	solutions.push(board);
+    	var solCount = document.getElementById("solutionCount");
+    	solCount.innerHTML = boards.length.toString() + " solutions";
     }
 
-    function validate(event) {
-    	var v = document.getElementById('valid');
-    	v.innerHTML = 'works!';
-    	var id = parseInt(event.srcElement.id.replace('solBoard', ''));
+    function existsInSolutions(g) {
+    	for (var i = 0; i < solutions.length; i++) {
+    		if (solutions[i][1] == g[1] || parseInt(solutions[i][1].toString().split("").reverse().join('')) == g[1])
+    			return true;
+    	}
+    	return false;
+    } 
 
+    function validate(id) {
+    	var v = document.getElementById('valid');
+    	console.log(id);
     }
 
   </script>
@@ -134,8 +172,8 @@
 	}
 
 	div.chessBoard {
-		width: 300px;
-		height: 300px;
+		width: 400px;
+		height: 400px;
 		float: center;
 		margin: 10px;
 	}
@@ -166,7 +204,7 @@
 <body>
 
 	<div id="solutions" class="solutions">
-		<button onClick='addSolution()'>Add Solution</button>
+		<p id="solutionCount">0 solutions</p>
 		<ul id="solutionsList">
 		</ul>
 	</div>
@@ -176,7 +214,7 @@
 		</div>
 
 		<div style="float: left; padding: 10px"> 
-			<p id='valid'>This is an example paragraph</p>
+			<p id='valid'></p>
 		</div>
 
 	</div>
