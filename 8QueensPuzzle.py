@@ -55,9 +55,9 @@ a = []
 
 def test():
         n = 8
-        while len(a) < 95:
+        while len(a) < 92:
                 grid = perm(n)
-                while not Optimized_val(grid[0]):
+                while not val(grid[0]):
                     grid = perm(n)
                 b = True
                 for i in a:

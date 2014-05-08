@@ -3,8 +3,8 @@
 
   <title>8 Queens Puzzle</title>
   <script type="text/javascript" src="http://underscorejs.org/underscore-min.js"></script>
+  <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
   <script type="text/javascript" src="js/chessboard-0.3.0.js"></script>
-  <script type="text/javascript" src="js/jquery-2.1.0.js"></script>
   <link rel="stylesheet" href="css/chessboard-0.3.0.css" />
 
   <script type="text/javascript">
@@ -21,6 +21,7 @@
   		genAllSolutions();
 
   		mainBoard = new ChessBoard("chessBoard", {});
+  		console.log(solutions[0][0]);
   		mainBoard.position(toFen(solutions[0][0]));
 
   		for (var i = 0; i < solutions.length; i++) {
@@ -28,7 +29,7 @@
 		}
     });
 
-	function genAllSolutions() {
+	function genAllSolutionsOld() {
 		for (var i = 0; i < 23; i++) {
 			var grid = perm();
 	  		while (true) {
@@ -40,6 +41,48 @@
 			console.log(i);
 		}
 		console.log(solutions.length);
+	}
+
+	function genAllSolutions() {
+	    permutate([0,1,2,3,4,5,6,7], 
+	    	function (grid) {
+	    		var g = [grid.slice(), parseInt(grid.join(''))];
+	    		if (val(grid) && !existsInSolutions(g)) {
+	    			solutions.push(g);
+	    		}
+	    	});
+	
+		console.log('found ' + solutions.length.toString() + " solutions");
+	}
+
+	function permutate(array, callback) {
+	    // Do the actual permuation work on array[], starting at index
+	    function p(array, index, callback) {
+	        // Swap elements i1 and i2 in array a[]
+	        function swap(a, i1, i2) {
+	        	var t = a[i1];
+	        	a[i1] = a[i2];
+	        	a[i2] = t;
+	        }
+  
+  	        if (index == array.length - 1) {
+  	        	callback(array);
+  	        	return 1;
+  	        } else {
+  	            var count = p(array, index + 1, callback);
+  	            for (var i = index + 1; i < array.length; i++) {
+  	            	swap(array, i, index);
+  	            	count += p(array, index + 1, callback);
+  	            	swap(array, i, index);
+  	            }
+  	          return count;
+	        }
+	    }
+
+		if (!array || array.length == 0) {
+			return 0;
+		}
+		return p(array, 0, callback);
 	}
 
 	function toFen(g) {
@@ -115,7 +158,7 @@
 	
 
 		var solP = document.createElement('p');
-			solP.innerHTML = grid[1];
+			solP.innerHTML = (grid[1].length < 0 ? '0' : '') + grid[1];
     	var solBoard = document.createElement('div');
 	    	solBoard.id = 'solBoard' + boards.length.toString();
 	    	solBoard.class = 'solutionsBoard';
@@ -133,10 +176,13 @@
     }
 
     function existsInSolutions(g) {
+    	function r(x) {
+    		return parseInt(x.toString().split("").reverse().join('')) * (x.toString()<8?10:1);	
+    	}
     	for (var i = 0; i < solutions.length; i++) {
-    		var revId = parseInt(solutions[i][1].toString().split("").reverse().join(''));
-    		if (solutions[i][1] == g[1] || revId == g[1] ||
-    			99999999-solutions[i][1] == g[1] || 99999999-revId == g[1])
+    		if (solutions[i][1] == g[1] || r(solutions[i][1]) == g[1] ||
+    			99999999-solutions[i][1] == g[1] || 99999999-r(solutions[i][1]) == g[1] ||
+    			r(99999999-r(solutions[i][1])) == g[1] || 99999999 - r(99999999-r(solutions[i][1])) == g[1])
     			return true;
     	}
     	return false;
