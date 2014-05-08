@@ -133,7 +133,8 @@
 
     function existsInSolutions(g) {
     	for (var i = 0; i < solutions.length; i++) {
-    		if (solutions[i][1] == g[1] || parseInt(solutions[i][1].toString().split("").reverse().join('')) == g[1])
+    		if (solutions[i][1] == g[1] || parseInt(solutions[i][1].toString().split("").reverse().join('')) == g[1] ||
+    			99999999-solutions[i][1] == g[1])
     			return true;
     	}
     	return false;
