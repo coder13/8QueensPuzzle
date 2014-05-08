@@ -29,7 +29,7 @@
     });
 
 	function genAllSolutions() {
-		for (var i = 0; i < 92; i++) {
+		for (var i = 0; i < 23; i++) {
 			var grid = perm();
 	  		while (true) {
 	  			if (val(grid[0]) && !existsInSolutions(grid))
@@ -37,7 +37,7 @@
 	  			grid = perm();
 	  		}
 	  		solutions.push(grid);
-	  		i++;
+			console.log(i);
 		}
 		console.log(solutions.length);
 	}
@@ -67,6 +67,8 @@
 	}
 
     function val(g) {
+    	if (g == null)
+    		return false;
      	for (var i = 0; i < (g.length-1); i++) {
      		for (j = i+1; j < (g.length); j++) {
      			if (Math.abs(g[j]-g[i]) == Math.abs(j-i)) {
@@ -80,23 +82,22 @@
     function combine(a,b) {
     	var c = 0;
     	for (var i = a.length-1; i > -1; i--)
-    		c |= a[i]<<(b*i);
+    		c |= a[i] << (b*i);
     	return c;
     }
 
-	function perm(s) {
-		n = s?s:8; 
-		var a = [];
+	function perm() { 
+		var g = [];
 		var b = 0;
-		while (a.length < n) {
-			var r = rnd(0,n);
-			while (a.indexOf(r) != -1)
-				r = rnd(0,n);
-			a.push(r);
+		while (g.length < 8) {
+			var r = rnd(0,8);
+			while (g.indexOf(r) != -1)
+				r = rnd(0,8);
+			g.push(r);
 		}
 		// b = combine(a, Math.ceil(log2(n)));
-		b = parseInt(a.join(''));
-		return [a,b];
+		b = parseInt(g.join(''));
+		return [g,b];
 	}
 
     function addSolution(grid) {
@@ -133,8 +134,9 @@
 
     function existsInSolutions(g) {
     	for (var i = 0; i < solutions.length; i++) {
-    		if (solutions[i][1] == g[1] || parseInt(solutions[i][1].toString().split("").reverse().join('')) == g[1] ||
-    			99999999-solutions[i][1] == g[1])
+    		var revId = parseInt(solutions[i][1].toString().split("").reverse().join(''));
+    		if (solutions[i][1] == g[1] || revId == g[1] ||
+    			99999999-solutions[i][1] == g[1] || 99999999-revId == g[1])
     			return true;
     	}
     	return false;
