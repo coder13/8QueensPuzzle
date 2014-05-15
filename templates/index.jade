@@ -1,0 +1,25 @@
+doctype html
+html
+  head
+    title='8 Queens Puzzle'
+    link(rel='stylesheet', href='/css/chessboard-0.3.0.css')
+    link(rel='stylesheet', href='/css/8QueensPuzzle.css')
+
+    script(src='http://underscorejs.org/underscore-min.js')
+    script(src='/js/jquery-2.1.0.js')
+    script(src='/js/chessboard-0.3.0.js')
+    script(type='text/javascript'). 
+        document.addEventListener('DOMContentLoaded', function() {
+            var fen = document.getElementById('chessBoard').innerHTML;
+            var mainBoard = new ChessBoard("chessBoard", {position: fen}); 
+        });
+
+  body
+    div.solutions#solutions
+        p= solutions.length + ' solutions'
+        br
+        ul
+          - for (var i = 0; i < solutions.length; i++)
+            li: div(id= 'solBoard' + i)!= solutions[i][1]
+    div(style='width: 1000px; float:left;')
+      div.chessBoard#chessBoard()!= mainSol.fen
