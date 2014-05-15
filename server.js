@@ -1,4 +1,5 @@
 var Hapi = require('hapi');
+var _ = require('underscore');
 port = 8000;
 
 solutions = []
@@ -20,10 +21,10 @@ function route(request, reply) {
 }
 
 function getSolution(request, reply) {
-  // var randomSolution = solutions[rnd(0,solutions.length)];
-  // console.log(randomSolution);
-  // reply(JSON.stringify(randomSolution));
-  reply(JSON.stringify({fen: 'Q/Q/Q/Q/Q/Q/Q/Q'}));
+  var randomSolution = solutions[rnd(0,solutions.length)];
+  console.log(randomSolution);
+  reply(JSON.stringify({id: randomSolution[1], fen: randomSolution[2]}));
+  // reply(JSON.stringify({fen: 'Q/Q/Q/Q/Q/Q/Q/Q'}));
 }
 
 function sendSolution(request, reply) {
@@ -104,11 +105,11 @@ function permutate(array, callback) {
 }
 
 function val(g) {
-    	if (g == null)
+    	if (g == null || g.length != _.uniq(g).length)
     		return false;
      	for (var i = 0; i < (g.length-1); i++) {
      		for (j = i+1; j < (g.length); j++) {
-     			if (Math.abs(g[j]-g[i]) == Math.abs(j-i)) {
+     			if (Math.abs(g[j]-g[i]) == Math.abs(j-i) || j-i==0) {
      				return false;
      			}
      		}

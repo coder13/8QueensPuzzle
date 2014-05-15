@@ -1,6 +1,6 @@
 var mainBoard;
 
-document.addEventListener('DOMContentLoaded', function() {
+$(document).ready(function() {
             $.getJSON("/solution", function(data) {
                 var solution = data;
                 mainBoard = new ChessBoard("chessBoard", {draggable: true, position: solution.fen});
@@ -11,6 +11,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function postBoard(event) {
     $.post('/sendSolution', {item: mainBoard.fen()}, function (data) {
-        console.log(data);
+        $('#info').html(data?'works':'doesn\'t work');
     });
 }
