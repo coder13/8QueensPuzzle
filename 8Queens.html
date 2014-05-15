@@ -1,22 +1,21 @@
 <html>
-<head>
+	<head>
 
-  <title>8 Queens Puzzle</title>
-  <script type="text/javascript" src="http://underscorejs.org/underscore-min.js"></script>
-  <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
-  <script type="text/javascript" src="js/chessboard-0.3.0.js"></script>
-  <link rel="stylesheet" href="css/chessboard-0.3.0.css" />
+	  <title>8 Queens Puzzle</title>
 
-  <script type="text/javascript">
+	  <script type="text/javascript" src="http://underscorejs.org/underscore-min.js"></script>
+	  <script type="text/javascript"src="js/jquery-2.1.0.js"></script>
+	  <script type="text/javascript" src="js/chessboard-0.3.0.js"></script>
+	  <script type="text/javascript" src="js/8QueensPuzzle.js"></script>
 
-  	var solutions = [];
-  	var boards = [];
-  	var mainBoard;
+	  <link rel="stylesheet" href="css/chessboard-0.3.0.css" />
+	  <link rel="stylesheet" href="css/8QueensPuzzle.css" />
+	  
+	</head>
 
-	var solCfg = {
-		'showNotation': false
-	}
+	<body>
 
+<<<<<<< HEAD
 	document.addEventListener('DOMContentLoaded', function() {
   		genAllSolutions();
 
@@ -260,14 +259,25 @@
 	<div style="width: 1000px; float:left;" > 
 		<div style="float: left">
 			<div id="chessBoard" class="chessBoard" onclick="validate()"></div>
+=======
+		<div id="solutions" class="solutions">
+			<p id="solutionCount">0 solutions</p>
+			<ul id="solutionsList">
+			</ul>
+>>>>>>> 88c855a2742f832cc80411896905b391ceb2a66e
 		</div>
 
-		<div style="float: left; padding: 10px"> 
-			<p id='valid'></p>
+		<div style="width: 1000px; float:left;" > 
+			<div style="float: left">
+				<div id="chessBoard" class="chessBoard" onclick="validate()"></div>
+			</div>
+
+			<div style="float: left; padding: 10px"> 
+				<p id='valid'></p>
+			</div>
 		</div>
 
-	</div>
-</body>
+	</body>
 
 
 </html>

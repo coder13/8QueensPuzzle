@@ -1,0 +1,49 @@
+body  {
+	position: relative;
+}
+
+ul {
+	list-style: none;
+	width: 100px;
+	padding: 0px;
+	margin: 0px;
+	border: none;
+}
+
+li {
+	list-style: none;
+	padding-left: 0;
+	
+	width:100px;
+	margin-left:0px;
+	margin-top: 20px;
+	margin-bottom: 20px;
+
+	float: center;
+	text-indent: 0px;
+}
+
+div.chessBoard {
+	width: 400px;
+	height: 400px;
+	float: center;
+	margin: 10px;
+}
+
+div.solBoard {
+	width: 48px;
+	height: 48px;
+	padding: none;
+
+}
+
+	div.solutions {
+		overflow: auto;
+		width: 120;
+		height: 100%;
+		float: left;
+
+		padding: 0px;
+		border: none;
+	border-right: 1px solid black;
+	}
