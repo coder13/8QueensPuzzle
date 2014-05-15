@@ -33,7 +33,7 @@
 		for (var i = 0; i < 23; i++) {
 			var grid = perm();
 	  		while (true) {
-	  			if (val(grid[0]) && !existsInSolutions(grid))
+	  			if (val(grid[0]))
 	  				break;
 	  			grid = perm();
 	  		}
@@ -47,7 +47,7 @@
 	    permutate([0,1,2,3,4,5,6,7], 
 	    	function (grid) {
 	    		var g = [grid.slice(), parseInt(grid.join(''))];
-	    		if (val(grid) && !existsInSolutions(g)) {
+	    		if (val(g[0]) && !existsInSolutions(g)) {
 	    			solutions.push(g);
 	    		}
 	    	});
