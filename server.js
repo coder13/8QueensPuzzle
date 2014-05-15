@@ -19,8 +19,13 @@ function route(request, reply) {
 	reply.view('index', context);
 }
 
-function sendSolutions(request, reply) {
+function getSolutions(request, reply) {
   reply(JSON.stringify(solutions));
+}
+
+function sendSolution(request, reply) {
+  var data = request.payload.item;
+  reply(val(fromFen(data)));
 }
 
 server.route({
@@ -35,7 +40,8 @@ server.route({
   }
 });
 
-server.route({ method: 'GET', path: '/solutions', handler:sendSolutions});
+server.route({ method: 'GET', path: '/solutions', handler:getSolutions});
+server.route({ method: 'POST', path: '/sendSolution', handler:sendSolution});
 server.route({ method: 'GET', path: '/', handler:route});
 
 server.views({
@@ -126,4 +132,12 @@ function toFen(g) {
         fen += (g[i]?g[i].toString():'') + 'Q' + (i!=g.length-1?'/':'');
     }
     return fen;
+}
+
+function fromFen(fen) {
+  var g = [];
+  var f = fen.split('/');
+  for (var i = 0; i < f.length; i++)
+    g.push(parseInt(f[i]));
+  return g;
 }

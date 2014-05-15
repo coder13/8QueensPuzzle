@@ -11,11 +11,5 @@ html
     script(src='/js/8QueensClientScript.js')
 
   body
-    div.solutions#solutions
-        p= solutions.length + ' solutions'
-        br
-        ul
-          - for (var i = 0; i < solutions.length; i++)
-            li: div(id= 'solBoard' + i)!= solutions[i][1]
-    div(style='width: 1000px; float:left;')
-      div.chessBoard#chessBoard()!= mainSol.fen
+    div.chessBoard#chessBoard
+    button#postButton submit

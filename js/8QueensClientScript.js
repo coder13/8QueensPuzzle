@@ -1,13 +1,16 @@
+var mainBoard;
+
 document.addEventListener('DOMContentLoaded', function() {
-            var solutions = "";
-            var boards = [];
             $.getJSON("/solutions", function(data) {
                 solutions = data;
-                var mainBoard = new ChessBoard("chessBoard", {position: solutions[0][2]});
-
-                for (var i = 0; i < solutions.length; i++) {
-                    boards.push(new ChessBoard('solBoard' + i, {showNotation: false, position: solutions[i][2]}));
-                }
+                mainBoard = new ChessBoard("chessBoard", {draggable: true, position: solutions[0][2]});
             });
 
+            $('#postButton').on('click', postBoard);
         });
+
+function postBoard(event) {
+    $.post('/sendSolution', {item: mainBoard.fen()}, function (data) {
+        console.log(data);
+    });
+}
