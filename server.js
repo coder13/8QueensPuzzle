@@ -19,8 +19,11 @@ function route(request, reply) {
 	reply.view('index', context);
 }
 
-function getSolutions(request, reply) {
-  reply(JSON.stringify(solutions));
+function getSolution(request, reply) {
+  // var randomSolution = solutions[rnd(0,solutions.length)];
+  // console.log(randomSolution);
+  // reply(JSON.stringify(randomSolution));
+  reply(JSON.stringify({fen: 'Q/Q/Q/Q/Q/Q/Q/Q'}));
 }
 
 function sendSolution(request, reply) {
@@ -40,7 +43,7 @@ server.route({
   }
 });
 
-server.route({ method: 'GET', path: '/solutions', handler:getSolutions});
+server.route({ method: 'GET', path: '/solution', handler:getSolution});
 server.route({ method: 'POST', path: '/sendSolution', handler:sendSolution});
 server.route({ method: 'GET', path: '/', handler:route});
 
@@ -140,4 +143,8 @@ function fromFen(fen) {
   for (var i = 0; i < f.length; i++)
     g.push(parseInt(f[i]));
   return g;
+}
+
+function rnd(min, max) {
+  return Math.floor(Math.random()*(max-min)-min);
 }
